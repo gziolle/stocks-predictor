@@ -58,3 +58,15 @@ def compute_MACD(x, slow=26, fast=12):
     emaslow = exp_moving_average(x, slow)
     emafast = exp_moving_average(x, fast)
     return np.array([emaslow, emafast, emafast - emaslow]).transpose()
+
+def on_balance_volume(close, volume):
+    obv = [volume[0]]
+
+    for i in range(1, len(volume)):
+        signal = 0
+        if close[i] > close[i-1]:
+            signal = 1
+        elif close[i] < close[i-1]:
+            signal = -1
+        obv.append(obv[i-1] + signal * volume[i])
+    return obv
